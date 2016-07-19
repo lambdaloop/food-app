@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, Image } from 'react-native';
+import { Platform, TouchableElement, TouchableHighlight, TouchableNativeFeedback } from 'react-native';
 import Button from 'react-native-button';
 
 const styles = StyleSheet.create({
@@ -46,9 +47,17 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#eeeeee',
-        fontSize: 20,
-        color: "black"
+        // fontSize: 20,
+        // color: "black",
+        padding: 15,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20
     },
+    buttonText: {
+        fontSize: 20
+    }
 });
 
 class Ingredient extends Component {
@@ -64,17 +73,31 @@ class Ingredient extends Component {
 }
 
 class Main extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {imageShown: false};
+    }
+
     render() {
         const imgUrl = 'http://assets.epicurious.com/photos/54bac91ae231becc7f3d37bf/6:4/w_620%2Ch_413/chocolate-mousse-6x4.jpg';
-        
+
+        let img = (
+            <Image
+              style={styles.foodImage}
+              source={{uri: imgUrl}}
+              />
+        );
+
+        var TouchableElement = TouchableHighlight;
+        if (Platform.OS === 'android') {
+            TouchableElement = TouchableNativeFeedback;
+        }
+
         return (
             <View style={styles.container}>
-              <Image
-                style={styles.foodImage}
-                source={{uri: imgUrl}}
-                />
+              {this.state.imageShown ? img : null}
               <Text style={styles.foodTitle}>
-                Chocolate Mousse 
+                Chocolate Mousse
               </Text>
               <Text>
                 <Text style={styles.prepTime}>
@@ -89,12 +112,15 @@ class Main extends Component {
                 <Ingredient text="7 oz fine-quality bittersweet chocolate (not unsweetened), chopped" />
                 <Ingredient text="garnish: lightly sweetened whipped cream" />
               </View>
-              
+
               <Button
-                onPress={() => console.log('PRESSED BUTTON')} 
-                style={styles.button}
+                onPress={() => this.setState({imageShown: !this.state.imageShown})}
                 >
-                Hello
+                <View style={styles.button} >
+                  <Text style={styles.buttonText}>
+                    Toggle image
+                  </Text>
+                </View>
               </Button>
 
             </View>
